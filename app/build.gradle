@@ -42,6 +42,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
+    //splashActivity
+    implementation "androidx.core:core-splashscreen:$splash_version"
+
     //viewModels
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.6"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodel_version"
