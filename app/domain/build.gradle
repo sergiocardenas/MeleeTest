@@ -7,11 +7,11 @@ plugins {
 
 android {
     namespace 'com.sc.domain'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 26
-        targetSdk 33
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -44,4 +44,8 @@ dependencies {
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-android-compiler:2.44.2")
+
+    //Mockito
+    testImplementation 'org.mockito:mockito-core:5.4.0'
+    androidTestImplementation 'org.mockito:mockito-android:5.4.0'
 }
