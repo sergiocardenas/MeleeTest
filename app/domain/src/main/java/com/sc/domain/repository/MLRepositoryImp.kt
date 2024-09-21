@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.flow
 
 class MLRepositoryImp (
 ) : MLRepository {
-    override suspend fun getSearchResult(query: String): Flow<List<MLItemModel>> {
+    override suspend fun getSearchResult(query: String): Flow<List<MLItemModel>?> {
         return flow { listOf(MLItemModel())  }
     }
 
-    override suspend fun getDetailResult(id: String): Flow<MLItemModel> {
+    override suspend fun getDetailResult(id: String): Flow<MLItemModel?> {
         return flow { MLItemModel() }
     }
 }
