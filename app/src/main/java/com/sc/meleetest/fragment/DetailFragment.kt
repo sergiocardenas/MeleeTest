@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.Text
 import androidx.compose.ui.platform.ComposeView
+import com.sc.meleetest.screen.DetailScreen
 
 /**
  * A simple [Fragment] subclass.
@@ -23,7 +23,7 @@ class DetailFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            Text(text = "DetailFragment")
+            DetailScreen()
         }
         return composeView
     }
