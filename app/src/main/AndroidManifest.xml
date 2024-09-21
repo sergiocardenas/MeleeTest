@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MeleeTest"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:theme="@style/Base.Theme.MeleeTest.Splash"
             android:exported="true">
             <intent-filter>
