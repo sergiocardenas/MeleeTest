@@ -23,7 +23,7 @@ class SearchScreenTest {
         composeTestRule.setContent {
             HomeScreen(click)
         }
-        composeTestRule.onNodeWithText("Go to SearchFragment").performClick()
+        composeTestRule.onNodeWithText("Go to DetailFragment").performClick()
         Assert.assertTrue(goDetail)
     }
 }
