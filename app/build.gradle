@@ -64,6 +64,8 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_ui_version"
     implementation "androidx.activity:activity-compose:$activity_compose_version"
     implementation "io.coil-kt:coil-compose:2.4.0"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_ui_version")
 
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
@@ -73,4 +75,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$corroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$corroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$corroutine_version"
+
+    //Mockito
+    testImplementation 'org.mockito:mockito-core:5.4.0'
+    androidTestImplementation 'org.mockito:mockito-android:5.4.0'
 }
