@@ -48,6 +48,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.8.3'
 
     //splashActivity
     implementation "androidx.core:core-splashscreen:$splash_version"
@@ -70,11 +71,14 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    androidTestImplementation "androidx.navigation:navigation-testing:$navigation_version"
+    implementation "androidx.navigation:navigation-fragment:$navigation_version"
+    implementation "androidx.navigation:navigation-runtime:$navigation_version"
 
     //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$corroutine_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$corroutine_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$corroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
 
     //Mockito
     testImplementation 'org.mockito:mockito-core:5.4.0'
