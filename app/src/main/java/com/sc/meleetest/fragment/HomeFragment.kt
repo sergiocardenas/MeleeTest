@@ -35,10 +35,10 @@ class HomeFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            HomeScreen() {
-                homeViewModel.searchQuery("test")
-                goToSearch()
-            }
+            HomeScreen(
+                homeViewModel,
+                homeViewModel::searchQuery
+            )
         }
         return composeView
     }
