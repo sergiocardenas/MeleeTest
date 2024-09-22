@@ -21,9 +21,9 @@ class SearchScreenTest {
         var goDetail = false
         val click : () -> Unit = { goDetail = true}
         composeTestRule.setContent {
-            HomeScreen(click)
+            SearchScreen(click)
         }
-        composeTestRule.onNodeWithText("Go to SearchFragment").performClick()
+        composeTestRule.onNodeWithText("Go to DetailFragment").performClick()
         Assert.assertTrue(goDetail)
     }
 }

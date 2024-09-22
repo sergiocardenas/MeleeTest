@@ -39,7 +39,7 @@ fun SearchScreen(
             )
         ) {
             Text(
-                text = "Go to SearchFragment",
+                text = "Go to DetailFragment",
                 color = colorResource(id = R.color.white)
             )
         }
