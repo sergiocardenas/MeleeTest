@@ -21,8 +21,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,6 +51,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sc.meleetest.R
+import com.sc.meleetest.utils.SEARCH_BUTTON_DESCRIPTION
+import com.sc.meleetest.utils.SEARCH_TEXT_FIELD_HINT
 import com.sc.meleetest.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -66,6 +72,7 @@ fun HomeScreen(
     val configuration = LocalConfiguration.current
     val focusManager = LocalFocusManager.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
 
     val shakeOffset by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
@@ -82,107 +89,131 @@ fun HomeScreen(
             isSearchShaking.value = false
         }
     }
-
-    Column(
+    Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.white)),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-
-        Image(
-            painter = painterResource(id = R.drawable.lg_mercadolibre),
-            contentDescription = "ML_Logo",
-            modifier = Modifier.size(120.dp),
-        )
-        Text(
-            text = "Busca productos, marcas y mas",
-            maxLines = 1,
-            fontSize = 20.sp,
-        )
-        Row (
+        .fillMaxSize(),
+        scaffoldState = scaffoldState,
+    ) { padding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .padding(padding)
+                .fillMaxSize()
+                .background(colorResource(id = R.color.white)),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            TextField(
-                value = searchQuery.value,
-                onValueChange = {
-                    searchQuery.value = it
-                },
-                label = {
-                    Text(
-                        text = "Buscar",
-                        maxLines = 1
-                    )
-                },
-                isError = isSearchShaking.value && searchQuery.value.isEmpty(),
-                modifier = Modifier
-                    .weight(if (isPortrait) 8.75f else 9.3f)
-                    .padding(end = 8.dp)
-                    .offset(x = if (isSearchShaking.value) shakeOffset.dp else 0.dp),
+
+            Image(
+                painter = painterResource(id = R.drawable.lg_mercadolibre),
+                contentDescription = "ML_Logo",
+                modifier = Modifier.size(120.dp),
             )
-            Row(
+            Text(
+                text = "Busca productos, marcas y mas",
+                maxLines = 1,
+                fontSize = 20.sp,
+            )
+            Row (
                 modifier = Modifier
-                    .weight(if (isPortrait) 1.25f else 0.7f),
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
             ) {
-                IconButton(
-                    onClick = {
-                        focusManager.clearFocus()
-                        isSearchShaking.value = searchQuery.value.isEmpty()
-                        onSearchClick(searchQuery.value)
+                TextField(
+                    value = searchQuery.value,
+                    onValueChange = {
+                        searchQuery.value = it
                     },
-                    modifier = Modifier
-                        .size(24.dp)
-                        .padding(end = 8.dp)
-                        .background(
-                            colorResource(id = R.color.mercado_yellow),
-                            shape = CircleShape
+                    label = {
+                        Text(
+                            text = SEARCH_TEXT_FIELD_HINT,
+                            maxLines = 1
                         )
+                    },
+                    isError = isSearchShaking.value && searchQuery.value.isEmpty(),
+                    modifier = Modifier
+                        .weight(if (isPortrait) 8.75f else 9.3f)
+                        .padding(end = 8.dp)
+                        .offset(x = if (isSearchShaking.value) shakeOffset.dp else 0.dp),
+                )
+                Row(
+                    modifier = Modifier
+                        .weight(if (isPortrait) 1.25f else 0.7f),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_search),
-                        contentDescription = "Search",
-                        tint = Color.White,
+                    IconButton(
+                        onClick = {
+                            focusManager.clearFocus()
+                            isSearchShaking.value = searchQuery.value.isEmpty()
+                            onSearchClick(searchQuery.value)
+                        },
                         modifier = Modifier
-                            .size(20.dp)
-                    )
+                            .size(24.dp)
+                            .padding(end = 8.dp)
+                            .background(
+                                colorResource(id = R.color.mercado_yellow),
+                                shape = CircleShape
+                            )
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_search),
+                            contentDescription = SEARCH_BUTTON_DESCRIPTION,
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        viewModel?.let {
+            val searching = viewModel.search.collectAsState()
+            if(searching.value){
+                showLoading()
+            }
+
+            val errorMessage = viewModel.errorMessage.collectAsState()
+            LaunchedEffect(errorMessage.value) {
+                launch {
+                    if(errorMessage.value.isNotEmpty()){
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = errorMessage.value,
+                            duration = SnackbarDuration.Long
+                        )
+                    }
                 }
             }
         }
     }
+}
 
-    viewModel?.let {
-        val searching = viewModel.search.collectAsState()
-        if(searching.value){
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(id = R.color.background_grey)),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                val strokeWidth = 5.dp
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .semantics {
-                            stateDescription = "Loading"
-                        }
-                        .drawBehind {
-                            drawCircle(
-                                Color.Blue,
-                                radius = size.width / 2 - strokeWidth.toPx() / 2,
-                                style = Stroke(strokeWidth.toPx())
-                            )
-                        },
-                    color = Color.LightGray,
-                    strokeWidth = strokeWidth
-                )
-            }
-        }
+@Composable
+fun showLoading(){
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.background_grey)),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        val strokeWidth = 5.dp
+        CircularProgressIndicator(
+            modifier = Modifier
+                .semantics {
+                    stateDescription = "Loading"
+                }
+                .drawBehind {
+                    drawCircle(
+                        Color.Blue,
+                        radius = size.width / 2 - strokeWidth.toPx() / 2,
+                        style = Stroke(strokeWidth.toPx())
+                    )
+                },
+            color = Color.LightGray,
+            strokeWidth = strokeWidth
+        )
     }
 }
+

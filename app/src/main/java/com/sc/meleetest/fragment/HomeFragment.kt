@@ -27,6 +27,14 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[NavigationViewModel::class.java]
+
+        homeViewModel.searchSuccess.observe(this){success ->
+            success?.let {
+                if(it){
+                    goToSearch()
+                }
+            }
+        }
     }
 
     override fun onCreateView(

@@ -1,19 +1,24 @@
 package com.sc.meleetest.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sc.domain.model.MLResultStatus
 import com.sc.domain.usecase.MLSearchUseCase
 import com.sc.meleetest.mapper.toListState
 import com.sc.meleetest.state.MLSearchItemState
+import com.sc.meleetest.utils.EMPTY_QUERY_MESSAGE
+import com.sc.meleetest.utils.EMPTY_SEARCH_MESSAGE
+import com.sc.meleetest.utils.ERROR_MESSAGE_TIME
+import com.sc.meleetest.utils.SEARCH_SUCCESS_RESET
+import com.sc.meleetest.utils.UNKNOWN_ERROR_SEARCH_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val ERROR_MESSAGE_TIME = 2000L
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -29,10 +34,13 @@ class HomeViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String>("")
     val errorMessage: StateFlow<String> = _errorMessage
 
+    private val _searchSuccess = MutableLiveData<Boolean>(false)
+    val searchSuccess: LiveData<Boolean> = _searchSuccess
+
     fun searchQuery(query: String){
-        if(query.isNotEmpty()){
-            _search.value = true
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if(query.isNotEmpty()){
+                _search.value = true
                 useCase.getSearchResult(query).collect{ resultStatus ->
                     _search.value = false
                     when(resultStatus){
@@ -40,21 +48,28 @@ class HomeViewModel @Inject constructor(
                             resultStatus.list.let { searchResult ->
                                 if(searchResult.isNotEmpty()){
                                     _list.value = searchResult.map { it.toListState() }
+                                    goToSearchPage()
                                 }else{
                                     _list.value = mutableListOf()
+                                    updateErrorMessage(EMPTY_SEARCH_MESSAGE)
                                 }
                             }
                         }
                         is MLResultStatus.MLError ->{
                             _list.value = mutableListOf()
+                            resultStatus.message.let {
+                                updateErrorMessage(it)
+                            }
                         }
                         else -> {
                             _list.value = mutableListOf()
+                            updateErrorMessage(UNKNOWN_ERROR_SEARCH_MESSAGE)
                         }
                     }
                 }
+            }else{
+                updateErrorMessage(EMPTY_QUERY_MESSAGE)
             }
-        }else{
         }
     }
 
@@ -62,5 +77,11 @@ class HomeViewModel @Inject constructor(
         _errorMessage.value = message
         delay(ERROR_MESSAGE_TIME)
         _errorMessage.value = ""
+    }
+
+    private suspend fun goToSearchPage(){
+        _searchSuccess.postValue(true)
+        delay(SEARCH_SUCCESS_RESET)
+        _searchSuccess.value = false
     }
 }
