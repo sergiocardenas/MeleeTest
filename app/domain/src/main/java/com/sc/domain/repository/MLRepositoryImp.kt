@@ -26,7 +26,9 @@ class MLRepositoryImp (
     }
 
     override suspend fun getDetailResult(id: String): Flow<MLItemModel?> {
-        return flow { emit(MLItemModel(
+        return flow {
+            delay(1000)
+            emit(MLItemModel(
             id = "1",
             title = "Motorola",
             condition = "new",

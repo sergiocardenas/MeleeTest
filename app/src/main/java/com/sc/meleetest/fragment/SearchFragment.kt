@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -59,6 +58,7 @@ class SearchFragment : Fragment() {
 
     fun goToDetail(){
         sharedViewModel.passDetail(searchViewModel.detailItem.value!!)
+        searchViewModel.resetSearch()
         findNavController().navigate(
             resId = R.id.action_SearchFragment_to_DetailFragment
         )

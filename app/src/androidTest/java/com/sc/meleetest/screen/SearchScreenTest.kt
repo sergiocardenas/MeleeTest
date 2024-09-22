@@ -51,7 +51,7 @@ class SearchScreenTest {
         viewModel.setSearchList(listOf(getTestSearchItem()))
 
         composeTestRule.setContent {
-            SearchScreen(viewModel){}
+            SearchScreen(viewModel)
         }
 
         composeTestRule.onNodeWithText(item.title).assertIsDisplayed()
@@ -63,7 +63,7 @@ class SearchScreenTest {
         viewModel.setSearchList(listOf())
 
         composeTestRule.setContent {
-            SearchScreen(viewModel){}
+            SearchScreen(viewModel)
         }
 
         composeTestRule.onNodeWithText(EMPTY_SEARCH_MESSAGE).assertIsDisplayed()

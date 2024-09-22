@@ -25,10 +25,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.sc.meleetest.R
 import com.sc.meleetest.state.MLSearchItemState
 
 @Preview
@@ -78,7 +80,7 @@ fun SearchItem (
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 
-                ProductImage(url = item.thumbnail)
+                ProductImage(url = item.thumbnail, size = 80.dp)
                 
                 Spacer(modifier = Modifier.width(16.dp))
 
@@ -132,16 +134,18 @@ fun SearchItem (
 
 @Composable
 fun ProductImage(
-    url: String
+    url: String,
+    size: Dp,
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)
             .crossfade(true)
+            .placeholder(R.drawable.lg_mercadolibre)
             .build(),
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier
-            .size(80.dp)
+            .size(size)
     )
 }
