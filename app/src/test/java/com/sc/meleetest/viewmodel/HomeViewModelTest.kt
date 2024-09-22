@@ -77,11 +77,6 @@ class HomeViewModelTest {
 
     @Test
     fun searchQueryEmpty(): Unit = runBlocking {
-        val searchResponse = MLResultStatus.MLSearchResult(listOf())
-
-        Mockito.`when`(useCase.getSearchResult(Mockito.anyString()))
-            .thenReturn(flowOf(searchResponse))
-
         viewModel.searchQuery("")
 
         assertEquals(viewModel.errorMessage.value, EMPTY_QUERY_MESSAGE)
