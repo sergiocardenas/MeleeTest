@@ -56,9 +56,7 @@ class HomeViewModel @Inject constructor(
                         }
                         is MLResultStatus.MLError ->{
                             _list.value = mutableListOf()
-                            resultStatus.message.let {
-                                updateErrorMessage(it)
-                            }
+                            updateErrorMessage(resultStatus.message)
                         }
                         else -> {
                             _list.value = mutableListOf()
@@ -80,7 +78,10 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun goToSearchPage(){
         _searchSuccess.postValue(true)
-        delay(SEARCH_SUCCESS_RESET)
+    }
+
+    fun resetSearch(){
         _searchSuccess.value = false
+        _list.value = listOf()
     }
 }

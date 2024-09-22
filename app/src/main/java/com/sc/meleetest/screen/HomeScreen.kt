@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sc.meleetest.R
+import com.sc.meleetest.utils.IMAGE_LOGO_DESCRIPTION
 import com.sc.meleetest.utils.SEARCH_BUTTON_DESCRIPTION
 import com.sc.meleetest.utils.SEARCH_TEXT_FIELD_HINT
 import com.sc.meleetest.viewmodel.HomeViewModel
@@ -60,12 +61,11 @@ import kotlinx.coroutines.launch
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(null){}
+    HomeScreen(null)
 }
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel?,
-    onSearchClick: (String) -> Unit
+    viewModel: HomeViewModel?
 ) {
     val searchQuery = rememberSaveable { mutableStateOf("") }
     val isSearchShaking = remember { mutableStateOf(false) }
@@ -105,7 +105,7 @@ fun HomeScreen(
 
             Image(
                 painter = painterResource(id = R.drawable.lg_mercadolibre),
-                contentDescription = "ML_Logo",
+                contentDescription = IMAGE_LOGO_DESCRIPTION,
                 modifier = Modifier.size(120.dp),
             )
             Text(
@@ -146,7 +146,9 @@ fun HomeScreen(
                         onClick = {
                             focusManager.clearFocus()
                             isSearchShaking.value = searchQuery.value.isEmpty()
-                            onSearchClick(searchQuery.value)
+                            viewModel?.apply {
+                                searchQuery(searchQuery.value)
+                            }
                         },
                         modifier = Modifier
                             .size(24.dp)
@@ -186,34 +188,6 @@ fun HomeScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun showLoading(){
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.background_grey)),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        val strokeWidth = 5.dp
-        CircularProgressIndicator(
-            modifier = Modifier
-                .semantics {
-                    stateDescription = "Loading"
-                }
-                .drawBehind {
-                    drawCircle(
-                        Color.Blue,
-                        radius = size.width / 2 - strokeWidth.toPx() / 2,
-                        style = Stroke(strokeWidth.toPx())
-                    )
-                },
-            color = Color.LightGray,
-            strokeWidth = strokeWidth
-        )
     }
 }
 

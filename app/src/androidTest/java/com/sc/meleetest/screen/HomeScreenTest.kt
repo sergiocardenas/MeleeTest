@@ -12,7 +12,6 @@ import com.sc.domain.model.MLResultStatus
 import com.sc.domain.usecase.MLSearchUseCase
 import com.sc.meleetest.mock.getTestItem
 import com.sc.meleetest.utils.EMPTY_QUERY_MESSAGE
-import com.sc.meleetest.utils.EMPTY_SEARCH_MESSAGE
 import com.sc.meleetest.utils.SEARCH_BUTTON_DESCRIPTION
 import com.sc.meleetest.utils.SEARCH_LOADIND_DESCRIPTION
 import com.sc.meleetest.utils.SEARCH_TEXT_FIELD_HINT
@@ -68,7 +67,7 @@ class HomeScreenTest {
             })
 
         composeTestRule.setContent {
-            HomeScreen(viewModel,viewModel::searchQuery)
+            HomeScreen(viewModel)
         }
         composeTestRule.onNodeWithText(SEARCH_TEXT_FIELD_HINT).performTextInput("")
         composeTestRule.onNodeWithContentDescription(SEARCH_BUTTON_DESCRIPTION).performClick()
@@ -89,7 +88,7 @@ class HomeScreenTest {
             })
 
         composeTestRule.setContent {
-            HomeScreen(viewModel,viewModel::searchQuery)
+            HomeScreen(viewModel)
         }
         composeTestRule.onNodeWithText(SEARCH_TEXT_FIELD_HINT).performTextInput("Motorola")
         composeTestRule.onNodeWithContentDescription(SEARCH_BUTTON_DESCRIPTION).performClick()
@@ -112,7 +111,7 @@ class HomeScreenTest {
             })
 
         composeTestRule.setContent {
-            HomeScreen(viewModel,viewModel::searchQuery)
+            HomeScreen(viewModel)
         }
         composeTestRule.onNodeWithText(SEARCH_TEXT_FIELD_HINT).performTextInput("Motorola")
         composeTestRule.onNodeWithContentDescription(SEARCH_BUTTON_DESCRIPTION).performClick()

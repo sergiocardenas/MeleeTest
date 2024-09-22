@@ -43,16 +43,14 @@ class HomeFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            HomeScreen(
-                homeViewModel,
-                homeViewModel::searchQuery
-            )
+            HomeScreen(homeViewModel)
         }
         return composeView
     }
 
     fun goToSearch(){
         sharedViewModel.passSearch(homeViewModel.list.value)
+        homeViewModel.resetSearch()
         findNavController().navigate(
             resId = R.id.action_HomeFragment_to_SearchFragment
         )

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -30,6 +31,14 @@ class SearchFragment : Fragment() {
 
         searchViewModel.setSearchList(sharedViewModel.searchList.value)
         sharedViewModel.clearSearch()
+
+        searchViewModel.fetchSuccess.observe(this){success ->
+            success?.let {
+                if(it && searchViewModel.detailItem.value!= null){
+                    goToDetail()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -38,9 +47,10 @@ class SearchFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            SearchScreen () {
-                searchViewModel.fetchDetail("01")
-                goToDetail()
+            SearchScreen (searchViewModel) {
+                activity?.apply {
+                    onBackPressedDispatcher.onBackPressed()
+                }
             }
         }
         return composeView
