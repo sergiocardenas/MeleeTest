@@ -124,28 +124,4 @@ class HomeScreenTest {
         assertEquals(viewModel.errorMessage.value, errorMsg)
         composeTestRule.onNode(hasText(errorMsg), useUnmergedTree = true).assertIsDisplayed()
     }
-
-    @Test
-    fun onEmptyQueryResults(): Unit = runBlocking {
-        val searchResponse = MLResultStatus.MLSearchResult(listOf())
-        Mockito.`when`(useCase.getSearchResult(Mockito.anyString()))
-            .thenReturn(flow {
-                //enough time for the test to similate an API response
-                delay(1000)
-                emit(searchResponse)
-            })
-
-        composeTestRule.setContent {
-            HomeScreen(viewModel,viewModel::searchQuery)
-        }
-        composeTestRule.onNodeWithText(SEARCH_TEXT_FIELD_HINT).performTextInput("Motorola")
-        composeTestRule.onNodeWithContentDescription(SEARCH_BUTTON_DESCRIPTION).performClick()
-        assertTrue(viewModel.search.value)
-        composeTestRule.onNode(hasStateDescription(SEARCH_LOADIND_DESCRIPTION)).assertExists()
-        delay(1000)
-        assertFalse(viewModel.search.value)
-        composeTestRule.onNode(hasStateDescription(SEARCH_LOADIND_DESCRIPTION)).assertDoesNotExist()
-        assertEquals(viewModel.errorMessage.value, EMPTY_SEARCH_MESSAGE)
-        composeTestRule.onNode(hasText(EMPTY_SEARCH_MESSAGE), useUnmergedTree = true).assertIsDisplayed()
-    }
 }

@@ -48,11 +48,10 @@ class HomeViewModel @Inject constructor(
                             resultStatus.list.let { searchResult ->
                                 if(searchResult.isNotEmpty()){
                                     _list.value = searchResult.map { it.toListState() }
-                                    goToSearchPage()
                                 }else{
                                     _list.value = mutableListOf()
-                                    updateErrorMessage(EMPTY_SEARCH_MESSAGE)
                                 }
+                                goToSearchPage()
                             }
                         }
                         is MLResultStatus.MLError ->{
