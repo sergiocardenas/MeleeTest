@@ -1,6 +1,6 @@
 package com.sc.domain.usecase
 
-import com.sc.domain.model.MLItemModel
+import com.sc.domain.mock.getTestItem
 import com.sc.domain.model.MLResultStatus
 import com.sc.domain.repository.MLRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,10 +51,4 @@ class MLDetailUseCaseTest {
             assertTrue(result is MLResultStatus.MLError)
         }
     }
-
-    private fun getTestItem() = MLItemModel(
-        id = "1",
-        title = "Motorola",
-        price = 10.0f
-    )
 }
