@@ -35,7 +35,16 @@ class MLRemoteDataSourceImp @Inject constructor(
 
     override suspend fun getDetailResult(id: String): Flow<MLResponseResult> = flow {
         val detail = withContext(Dispatchers.IO) {
-            MLResponseResult.MLResponseError("Service Failed")
+            val result = service.getDetail(id)
+            if(result.isSuccessful){
+                if(result.body()!=null){
+                    MLResponseResult.MLDetailResponseResult(result.body()!!)
+                }else{
+                    MLResponseResult.MLResponseError("Service without response")
+                }
+            }else{
+                MLResponseResult.MLResponseError("Service Failed")
+            }
         }
         emit(detail)
     }

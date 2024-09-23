@@ -2,6 +2,7 @@ package com.sc.data.datasource
 
 import com.sc.data.mocks.getMLItemResponseMock
 import com.sc.data.mocks.getMLSearchResponseMock
+import com.sc.data.response.MLItemResponse
 import com.sc.data.response.MLResponseResult
 import com.sc.data.response.MLSearchResponse
 import com.sc.data.service.MercadoLibreService
@@ -63,6 +64,43 @@ internal class MLRemoteDataSourceTest{
         Mockito.`when`(service.getSearch(Mockito.anyString())).thenReturn(retrofitResponse)
 
         val datasourceResult = dataSource.getSearchResult("test")
+
+        datasourceResult.collect{response ->
+            assertTrue(response is MLResponseResult.MLResponseError)
+        }
+    }
+
+    @Test
+    fun fetchDetailFromRemoteSuccess(): Unit = runBlocking {
+        val searchResponse = getMLItemResponseMock(
+            hasSalePrice = false,
+            hasTags = false
+        )
+
+        val retrofitResponse = Response.success(searchResponse)
+
+        Mockito.`when`(service.getDetail(Mockito.anyString())).thenReturn(retrofitResponse)
+
+        val datasourceResult = dataSource.getDetailResult("test")
+        val resultItem = getMLItemResponseMock(
+            hasSalePrice = false,
+            hasTags = false
+        )
+
+        datasourceResult.collect{response ->
+            assertTrue(response is MLResponseResult.MLDetailResponseResult)
+            val responseResult: MLResponseResult.MLDetailResponseResult = response as MLResponseResult.MLDetailResponseResult
+            assertEquals(resultItem,  responseResult.detail)
+        }
+    }
+
+    @Test
+    fun  fetchDetailFromRemoteFailure(): Unit = runBlocking {
+        val retrofitResponse = Response.error<MLItemResponse>(500, "Error".toResponseBody())
+
+        Mockito.`when`(service.getDetail(Mockito.anyString())).thenReturn(retrofitResponse)
+
+        val datasourceResult = dataSource.getDetailResult("test")
 
         datasourceResult.collect{response ->
             assertTrue(response is MLResponseResult.MLResponseError)
