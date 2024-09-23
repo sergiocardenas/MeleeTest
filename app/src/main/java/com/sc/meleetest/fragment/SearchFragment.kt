@@ -29,7 +29,6 @@ class SearchFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[NavigationViewModel::class.java]
 
         searchViewModel.setSearchList(sharedViewModel.searchList.value)
-        sharedViewModel.clearSearch()
 
         searchViewModel.fetchSuccess.observe(this){success ->
             success?.let {
