@@ -34,7 +34,11 @@ class DetailFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            DetailScreen()
+            DetailScreen(detailViewModel) {
+                activity?.apply {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
         }
         return composeView
     }

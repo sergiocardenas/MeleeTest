@@ -4,6 +4,8 @@ import com.sc.domain.model.MLResultStatus
 import com.sc.domain.usecase.MLSearchUseCase
 import com.sc.meleetest.mock.getTestItem
 import com.sc.meleetest.mock.getTestSearchItem
+import com.sc.meleetest.utils.EMPTY_QUERY_MESSAGE
+import com.sc.meleetest.utils.EMPTY_SEARCH_MESSAGE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -62,19 +64,15 @@ class HomeViewModelTest {
 
     @Test
     fun searchQueryEmpty(): Unit = runBlocking {
-        val searchResponse = MLResultStatus.MLSearchResult(listOf())
+        viewModel.searchQuery("")
 
-        Mockito.`when`(useCase.getSearchResult(Mockito.anyString()))
-            .thenReturn(flowOf(searchResponse))
-
-        viewModel.searchQuery("test")
-
-        assertEquals(viewModel.list.value.size, searchResponse.list.size)
+        assertEquals(viewModel.errorMessage.value, EMPTY_QUERY_MESSAGE)
     }
 
     @Test
     fun searchQueryError(): Unit = runBlocking {
-        val searchResponse = MLResultStatus.MLError("test error")
+        val errorMessage = "test error"
+        val searchResponse = MLResultStatus.MLError(errorMessage)
 
         Mockito.`when`(useCase.getSearchResult(Mockito.anyString()))
             .thenReturn(flowOf(searchResponse))
@@ -82,5 +80,6 @@ class HomeViewModelTest {
         viewModel.searchQuery("test")
 
         assertEquals(viewModel.list.value.size, 0)
+        assertEquals(viewModel.errorMessage.value, errorMessage)
     }
 }

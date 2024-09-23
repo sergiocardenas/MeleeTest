@@ -26,15 +26,6 @@ fun getTestSearchItem() = MLSearchItemState(
     original_price = 10.0f,
 )
 
-fun getTestEmptyIDSearchItem() = MLSearchItemState(
-    id = "",
-    title = "Motorola",
-    thumbnail = "http://mla-s1-p.mlstatic.com/943469-MLA31002769183_062019-I.jpg",
-    currency_id = "USD",
-    price = 10.0f,
-    original_price = 10.0f,
-)
-
 fun getTestDetailItem() = MLDetailItemState(
     id = "1",
     title = "Motorola",

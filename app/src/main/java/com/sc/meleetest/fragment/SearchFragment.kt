@@ -30,6 +30,14 @@ class SearchFragment : Fragment() {
 
         searchViewModel.setSearchList(sharedViewModel.searchList.value)
         sharedViewModel.clearSearch()
+
+        searchViewModel.fetchSuccess.observe(this){success ->
+            success?.let {
+                if(it && searchViewModel.detailItem.value!= null){
+                    goToDetail()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -38,9 +46,10 @@ class SearchFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            SearchScreen () {
-                searchViewModel.fetchDetail("01")
-                goToDetail()
+            SearchScreen (searchViewModel) {
+                activity?.apply {
+                    onBackPressedDispatcher.onBackPressed()
+                }
             }
         }
         return composeView
@@ -49,6 +58,7 @@ class SearchFragment : Fragment() {
 
     fun goToDetail(){
         sharedViewModel.passDetail(searchViewModel.detailItem.value!!)
+        searchViewModel.resetSearch()
         findNavController().navigate(
             resId = R.id.action_SearchFragment_to_DetailFragment
         )

@@ -27,6 +27,14 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[NavigationViewModel::class.java]
+
+        homeViewModel.searchSuccess.observe(this){success ->
+            success?.let {
+                if(it){
+                    goToSearch()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -35,16 +43,14 @@ class HomeFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            HomeScreen() {
-                homeViewModel.searchQuery("test")
-                goToSearch()
-            }
+            HomeScreen(homeViewModel)
         }
         return composeView
     }
 
     fun goToSearch(){
         sharedViewModel.passSearch(homeViewModel.list.value)
+        homeViewModel.resetSearch()
         findNavController().navigate(
             resId = R.id.action_HomeFragment_to_SearchFragment
         )
