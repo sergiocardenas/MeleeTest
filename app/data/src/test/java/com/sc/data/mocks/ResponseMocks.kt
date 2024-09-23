@@ -1,19 +1,14 @@
-package com.sc.domain.mock
+package com.sc.data.mocks
 
 import com.sc.data.response.MLItemResponse
-import com.sc.domain.model.MLItemModel
+import com.sc.data.response.MLSearchResponse
 
-fun getTestItem() = MLItemModel(
-    id = "MLA1149572373",
-    title = "Motorola",
-    price = 108000f
-)
 fun getMLItemResponseMock(
     hasSalePrice: Boolean,
     hasTags: Boolean,
 ) = MLItemResponse(
     id = "MLA1149572373",
-    title = "Motorola",
+    title = " Moto G5 Plus 32 Gb  Gris Lunar 2 Gb Ram",
     condition = "new",
     thumbnail = "http://http2.mlstatic.com/D_889938-MLA40645964182_022020-I.jpg",
     catalog_product_id = "MLA6353279",
@@ -32,11 +27,18 @@ fun getMLItemResponseMock(
     accepts_mercadopago = true,
     tags = if(hasTags)
         listOf(
-            "extended_warranty_eligible",
-            "good_quality_picture",
-            "good_quality_thumbnail",
-            "ahora-paid-by-buyer",
-            "immediate_payment",
-            "shipping_guaranteed")
+        "extended_warranty_eligible",
+        "good_quality_picture",
+        "good_quality_thumbnail",
+        "ahora-paid-by-buyer",
+        "immediate_payment",
+        "shipping_guaranteed")
     else null
+)
+
+fun getMLSearchResponseMock(mlItemList: List<MLItemResponse>) = MLSearchResponse(
+    site_id = "MLA",
+    country_default_time_zone = "GMT-03:00",
+    query = "Motorola G6",
+    results = mlItemList
 )

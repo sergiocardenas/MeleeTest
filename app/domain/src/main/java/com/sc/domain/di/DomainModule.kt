@@ -1,5 +1,6 @@
 package com.sc.domain.di
 
+import com.sc.data.datasource.MLRemoteDataSource
 import com.sc.domain.repository.MLRepository
 import com.sc.domain.repository.MLRepositoryImp
 import com.sc.domain.usecase.MLDetailUseCase
@@ -18,7 +19,7 @@ class DomainModule {
 
     @Singleton
     @Provides
-    fun provideMLRepository(): MLRepository = MLRepositoryImp()
+    fun provideMLRepository(dataSource: MLRemoteDataSource): MLRepository = MLRepositoryImp(dataSource)
 
     @Singleton
     @Provides
