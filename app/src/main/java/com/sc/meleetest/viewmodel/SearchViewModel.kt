@@ -10,9 +10,7 @@ import com.sc.meleetest.mapper.toDetailState
 import com.sc.meleetest.state.MLDetailItemState
 import com.sc.meleetest.state.MLSearchItemState
 import com.sc.meleetest.utils.EMPTY_DETAIL_DETAIL_MESSAGE
-import com.sc.meleetest.utils.EMPTY_QUERY_MESSAGE
 import com.sc.meleetest.utils.ERROR_MESSAGE_TIME
-import com.sc.meleetest.utils.SEARCH_SUCCESS_RESET
 import com.sc.meleetest.utils.UNKNOWN_ERROR_SEARCH_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
