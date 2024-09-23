@@ -25,7 +25,6 @@ class DetailFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[NavigationViewModel::class.java]
 
         detailViewModel.setDetail(sharedViewModel.detailItem.value)
-        sharedViewModel.clearDetail()
     }
 
     override fun onCreateView(

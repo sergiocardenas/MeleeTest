@@ -14,16 +14,8 @@ class NavigationViewModel(): ViewModel() {
     private val _detailItem = MutableStateFlow<MLDetailItemState?>(null)
     val detailItem: StateFlow<MLDetailItemState?> = _detailItem
 
-    fun clearSearch(){
-        _searchList.value = mutableListOf()
-    }
-
     fun passSearch(list: List<MLSearchItemState>){
         _searchList.value = list
-    }
-
-    fun clearDetail(){
-        _detailItem.value = null
     }
 
     fun passDetail(item: MLDetailItemState){
