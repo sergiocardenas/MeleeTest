@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -144,6 +145,7 @@ fun ProductImage(
             .placeholder(R.drawable.lg_mercadolibre)
             .build(),
         contentDescription = null,
+        error  = painterResource(id = R.drawable.ic_error),
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .size(size)
