@@ -6,17 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.sc.meleetest.R
 import com.sc.meleetest.screen.HomeScreen
+import com.sc.meleetest.viewmodel.HomeViewModel
+import com.sc.meleetest.viewmodel.NavigationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A simple [Fragment] subclass.
  */
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
+
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var sharedViewModel: NavigationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        sharedViewModel = ViewModelProvider(requireActivity())[NavigationViewModel::class.java]
+
+        homeViewModel.searchSuccess.observe(this){success ->
+            success?.let {
+                if(it){
+                    goToSearch()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -25,14 +43,14 @@ class HomeFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            HomeScreen() {
-                goToSearch()
-            }
+            HomeScreen(homeViewModel)
         }
         return composeView
     }
 
     fun goToSearch(){
+        sharedViewModel.passSearch(homeViewModel.list.value)
+        homeViewModel.resetSearch()
         findNavController().navigate(
             resId = R.id.action_HomeFragment_to_SearchFragment
         )

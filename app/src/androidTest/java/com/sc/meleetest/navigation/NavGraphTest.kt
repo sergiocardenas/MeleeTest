@@ -1,25 +1,24 @@
 package com.sc.meleetest.navigation
 
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation.setViewNavController
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sc.meleetest.fragment.HomeFragment
 import com.sc.meleetest.R
+import com.sc.meleetest.launchFragmentInHiltContainer
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class NavGraphTest {
 
     @Test
     fun fromHomeToSearch() {
-        val homeScenario = launchFragmentInContainer<HomeFragment>()
-
-        homeScenario.onFragment { fragment ->
+        launchFragmentInHiltContainer<HomeFragment>() {fragment ->
             fragment.activity?.let {activity ->
                 val navController = TestNavHostController(activity)
                 activity.runOnUiThread { navController.setGraph(R.navigation.nav_graph) }
@@ -35,9 +34,7 @@ class NavGraphTest {
 
     @Test
     fun fromSearchToHome() {
-        val homeScenario = launchFragmentInContainer<HomeFragment>()
-
-        homeScenario.onFragment { fragment ->
+        launchFragmentInHiltContainer<HomeFragment>() { fragment ->
             fragment.activity?.let {activity ->
                 val navController = TestNavHostController(activity)
                 activity.runOnUiThread { navController.setGraph(R.navigation.nav_graph) }
@@ -56,9 +53,7 @@ class NavGraphTest {
 
     @Test
     fun fromSearchToDetail() {
-        val homeScenario = launchFragmentInContainer<HomeFragment>()
-
-        homeScenario.onFragment { fragment ->
+        launchFragmentInHiltContainer<HomeFragment>() { fragment ->
             fragment.activity?.let {activity ->
                 val navController = TestNavHostController(activity)
                 activity.runOnUiThread { navController.setGraph(R.navigation.nav_graph) }
@@ -77,9 +72,7 @@ class NavGraphTest {
 
     @Test
     fun fromDetailToSearch() {
-        val homeScenario = launchFragmentInContainer<HomeFragment>()
-
-        homeScenario.onFragment { fragment ->
+        launchFragmentInHiltContainer<HomeFragment>() { fragment ->
             fragment.activity?.let {activity ->
                 val navController = TestNavHostController(activity)
                 activity.runOnUiThread { navController.setGraph(R.navigation.nav_graph) }

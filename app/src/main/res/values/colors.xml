@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mercado_yellow">#FFEED130</color>
+    <color name="background_grey">#44808080</color>
 </resources>

@@ -6,17 +6,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.sc.meleetest.R
 import com.sc.meleetest.screen.SearchScreen
+import com.sc.meleetest.viewmodel.NavigationViewModel
+import com.sc.meleetest.viewmodel.SearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A simple [Fragment] subclass.
  */
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
+
+    private lateinit var searchViewModel: SearchViewModel
+    private lateinit var sharedViewModel: NavigationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+        sharedViewModel = ViewModelProvider(requireActivity())[NavigationViewModel::class.java]
+
+        searchViewModel.setSearchList(sharedViewModel.searchList.value)
+        sharedViewModel.clearSearch()
+
+        searchViewModel.fetchSuccess.observe(this){success ->
+            success?.let {
+                if(it && searchViewModel.detailItem.value!= null){
+                    goToDetail()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -25,8 +46,10 @@ class SearchFragment : Fragment() {
     ): View {
         val composeView = ComposeView(requireContext())
         composeView.setContent {
-            SearchScreen () {
-                goToDetail()
+            SearchScreen (searchViewModel) {
+                activity?.apply {
+                    onBackPressedDispatcher.onBackPressed()
+                }
             }
         }
         return composeView
@@ -34,6 +57,8 @@ class SearchFragment : Fragment() {
 
 
     fun goToDetail(){
+        sharedViewModel.passDetail(searchViewModel.detailItem.value!!)
+        searchViewModel.resetSearch()
         findNavController().navigate(
             resId = R.id.action_SearchFragment_to_DetailFragment
         )
